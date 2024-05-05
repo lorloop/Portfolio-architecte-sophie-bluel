@@ -1,9 +1,23 @@
 const apiUrl = 'http://localhost:5678/api/'
 const portfolio = document.getElementById('portfolio')
+
+const loginLink = document.getElementById('loginLink')
+loginLink.addEventListener('click', () => {
+    const intro = document.getElementById('introduction')
+    intro.style.display = 'none'
+    portfolio.style.display = 'none'
+    const contact = document.getElementById('contact')
+    contact.style.display = 'none'
+    const login = document.getElementById('login')
+    login.style.display = 'block'
+})
+
 const authToken = window.localStorage.getItem('authToken')
 
 if (authToken) {
-    console.log('User connected')
+    loginLink.innerHTML = '<a href="#">logout</a>'
+    const editBar = document.getElementsByClassName('editBar')
+    editBar[0].style.display = 'flex'
 }
 
 
@@ -83,17 +97,6 @@ function displayWorks(works) {
             gallery.appendChild(figure)
         })
 }
-
-const loginLink = document.getElementById('loginLink')
-loginLink.addEventListener('click', () => {
-    const intro = document.getElementById('introduction')
-    intro.style.display = 'none'
-    portfolio.style.display = 'none'
-    const contact = document.getElementById('contact')
-    contact.style.display = 'none'
-    const login = document.getElementById('login')
-    login.style.display = 'block'
-})
 
 const loginForm = document.getElementById('loginForm')
 loginForm.addEventListener('submit', (event) => {

@@ -56,6 +56,19 @@ body {
 	font-size: 14px;
 	background-color: #FFFEF8;
 }
+
+.editBar {
+	display: none;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	height: 59px;
+	background-color: #000000;
+	color: #FFFFFF;
+	font-weight: 400;
+	font-family: 'Work Sans';
+}
+
 header {
 	max-width: 1140px;
 	display: flex;
