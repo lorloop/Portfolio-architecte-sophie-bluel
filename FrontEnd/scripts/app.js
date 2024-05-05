@@ -1,18 +1,23 @@
 const apiUrl = 'http://localhost:5678/api/'
 const portfolio = document.getElementById('portfolio')
+const authToken = window.localStorage.getItem('authToken')
 
 const loginLink = document.getElementById('loginLink')
 loginLink.addEventListener('click', () => {
-    const intro = document.getElementById('introduction')
-    intro.style.display = 'none'
-    portfolio.style.display = 'none'
-    const contact = document.getElementById('contact')
-    contact.style.display = 'none'
-    const login = document.getElementById('login')
-    login.style.display = 'block'
+    if (authToken) {
+        window.localStorage.removeItem('authToken')
+        window.location.href = '/'
+        window.location.reload(true)
+    } else {
+        const intro = document.getElementById('introduction')
+        intro.style.display = 'none'
+        portfolio.style.display = 'none'
+        const contact = document.getElementById('contact')
+        contact.style.display = 'none'
+        const login = document.getElementById('login')
+        login.style.display = 'block'
+    } 
 })
-
-const authToken = window.localStorage.getItem('authToken')
 
 if (authToken) {
     loginLink.innerHTML = '<a href="#">logout</a>'
