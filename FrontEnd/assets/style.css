@@ -46,20 +46,25 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+a {
+	text-decoration: none;
+	color: inherit;
+}
 /** end reset css**/
 body {
-	max-width: 1140px;
-	margin:auto;
 	font-family: 'Work Sans' ;
 	font-size: 14px;
+	background-color: #FFFEF8;
 }
 header {
+	max-width: 1140px;
 	display: flex;
 	justify-content: space-between;
-	margin: 50px 0
+	margin: 50px auto
 }
 section {
-	margin: 50px 0
+	max-width: 1140px;
+	margin: 50px auto
 }
 
 h1{
@@ -95,7 +100,7 @@ nav li {
 	font-size: 1.2em;
 }
 
-li:hover {
+li a:hover {
 	color: #B1663C;
 }
 #introduction {
@@ -164,8 +169,9 @@ li:hover {
 
 }
 #contact {
+	max-width: 1140px;
 	width: 50%;
-margin: auto;
+	margin: auto;
 }
 #contact > * {
 	text-align: center;
@@ -195,6 +201,48 @@ margin: auto;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
+#login {
+	display: none;
+	max-width: 1140px;
+	width: 30%;
+	margin: auto;
+	margin-top: 150px;
+	margin-bottom: 300px;
+}
+#login > * {
+	text-align: center;
+
+}
+#login h2{
+	margin-bottom: 20px;
+}
+#login form {
+	text-align: left;
+	margin-top:30px;
+	display: flex;
+	flex-direction: column;
+}
+
+#login input {
+	height: 50px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+#login label {
+	margin: 2em 0 1em 0;
+}
+
+#login .forgetLink {
+	display: flex;
+	justify-content: center;
+}
+
+#login a {
+	text-decoration: underline;
+}
+
+
 input[type="submit"]{
 	font-family: 'Syne';
 	font-weight: 700;
@@ -206,9 +254,15 @@ input[type="submit"]{
 	border-radius: 60px ;
 }
 
+footer {
+	background-color: #FFFFFF;
+	padding: 2em 0;
+}
+
 footer nav ul {
+	max-width: 1140px;
 	display: flex;
 	justify-content: flex-end;
-	margin: 2em
+	margin: auto;
 }
 

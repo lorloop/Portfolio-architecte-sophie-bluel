@@ -79,4 +79,15 @@ function displayWorks(works) {
         })
 }
 
+const loginLink = document.getElementById('loginLink')
+loginLink.addEventListener('click', () => {
+    const intro = document.getElementById('introduction')
+    intro.style.display = 'none'
+    portfolio.style.display = 'none'
+    const contact = document.getElementById('contact')
+    contact.style.display = 'none'
+    const login = document.getElementById('login')
+    login.style.display = 'block'
+})
+
 getWorks()
