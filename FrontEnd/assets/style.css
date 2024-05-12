@@ -215,7 +215,7 @@ li a:hover {
 }
 
 #login {
-	display: none;
+	display: block;
 	max-width: 1140px;
 	width: 30%;
 	margin: auto;
