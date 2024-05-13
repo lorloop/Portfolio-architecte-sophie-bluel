@@ -26,7 +26,7 @@
 			<li><a href="#portfolio">projets</a></li>
 			<li><a href="#contact">contact</a></li>
 			<li id="loginLink"><a href="login.html">login</a></li>
-			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
+			<li><a href="#"><img src="./assets/icons/instagram.png" alt="Instagram"></a></li>
 		</ul>
 	</nav>
 </header>
@@ -58,6 +58,20 @@
 			<input type="submit" value="Envoyer">
 		</form>
 	</section>
+
+	<aside id="modal" class="modal" aria-hidden="true" role="dialog" style="display: none;">
+		<div class="modal-wrapper js-modal-stop">
+			<button class="modal-close js-modal-close">X</button>
+			<div id="modalContent" class="modal-content">
+				<h3>Galerie photo</h3>
+				<div id="modalGallery">
+				</div>
+				<div id="modalAddForm" style="display: none;"></div>
+				<div class="modal-divider"></div>
+				<button id="modalAddPhotoBtn" class="modal-button">Ajouter une photo</button>
+			</div>
+		</div>
+	</aside>
 </main>
 
 <footer>
