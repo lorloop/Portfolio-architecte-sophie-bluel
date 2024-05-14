@@ -179,8 +179,23 @@ li a:hover {
 
 }
 
+.modal-header-btn {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-direction: row-reverse;
+	margin-bottom: 13px;
+}
+
+.modal-back {
+	height: 15px;
+	border: none;
+	background: none;
+	cursor: pointer;
+}
+
 .modal-close {
-	align-self: end;
+	align-items: end;
 	background: none;
 	border: none;
 	cursor: pointer;
@@ -229,7 +244,8 @@ li a:hover {
 	background-color: #1D6154;
 	margin : 35px auto ;
 	padding: 10px 50px;
-	text-align: center;
+	display: flex;
+	align-self: center;
 	border-radius: 60px ;
 	cursor: pointer;
 }
@@ -244,6 +260,83 @@ li a:hover {
 	position: absolute;
     margin-left: -25px;
     margin-top: 4px;
+}
+
+.form-photo-input {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+	background-color: #E8F1F6;
+	border-radius: 3px;
+}
+
+.js-form-photo-input {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 13px 0;
+}
+
+.form-photo-input img {
+	width: 76px;
+	margin-bottom: 20px;
+}
+
+.form-photo-input input[type=file] {
+	display: none;
+}
+
+.form-photo-input label span {
+	padding: 10px 33px;
+	width: 173px;
+	background-color: #CBD6DC;
+	border-radius: 50px;
+	color: #306685;
+	font-size: 14px;
+	font-weight: 500;
+	cursor: pointer;
+	margin: 7px 0;
+}
+
+.format-indicator {
+	color: #444444;
+	font-size: 10px;
+	margin-top: 20px;
+}
+
+.js-form-photo-preview img {
+	width: 129px;
+	margin: 0;
+}
+
+#addPhotoForm {
+	text-align: left;
+	margin-top:30px;
+	display: flex;
+	flex-direction: column;
+}
+
+#addPhotoForm input {
+	height: 50px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+#addPhotoForm select {
+	height: 50px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+#addPhotoForm label {
+	margin: 2em 0 1em 0;
+}
+
+#addPhotoForm .modal-button {
+	background-color: #A7A7A7;
 }
 
 #portfolio h2 {
@@ -363,7 +456,7 @@ li a:hover {
 }
 
 
-input[type="submit"]{
+#login input[type="submit"]{
 	font-family: 'Syne';
 	font-weight: 700;
 	color: white;

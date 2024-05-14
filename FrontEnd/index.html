@@ -61,14 +61,41 @@
 
 	<aside id="modal" class="modal" aria-hidden="true" role="dialog" style="display: none;">
 		<div class="modal-wrapper js-modal-stop">
-			<button class="modal-close js-modal-close">X</button>
+			<div class="modal-header-btn">
+				<button class="modal-close js-modal-close"><img src="./assets/icons/xmark.png" alt="xmark-icon"></button>
+				<button id="modalBackBtn" class="modal-back" style="display: none;"><img src="./assets/icons/arrow-left.png" alt="arrow-left-icon"></button>
+			</div>
 			<div id="modalContent" class="modal-content">
-				<h3>Galerie photo</h3>
+				<h3 id="modalTitle">Galerie photo</h3>
 				<div id="modalGallery">
+					<div id="modalGalleryItems"></div>
+					<div class="modal-divider"></div>
+					<button id="modalAddPhotoBtn" class="modal-button">Ajouter une photo</button>
 				</div>
-				<div id="modalAddForm" style="display: none;"></div>
-				<div class="modal-divider"></div>
-				<button id="modalAddPhotoBtn" class="modal-button">Ajouter une photo</button>
+				<div id="modalForm" style="display: none;">
+					<form enctype="multipart/form-data" action="#" method="post" id="addPhotoForm">
+						<div class="form-photo-input">
+							<div class="js-form-photo-input">
+								<img src="./assets/icons/thumbnail.png" alt="thumbnail-icon">
+								<div>
+									<label for="addPhotoFormPhoto">
+										<span>+ Ajouter photo</span>
+										<input type="file" name="image" id="addPhotoFormPhoto">
+									</label>
+								</div>
+								<p class="format-indicator">jpg, png : 4mo max</p>
+							</div>
+							<div class="js-form-photo-preview"></div>
+						</div>
+						
+						<label for="addPhotoFormTitle">Titre</label>
+						<input type="text" name="title" id="addPhotoFormTitle">
+						<label for="addPhotoFormCategory">Categorie</label>
+						<select name="category" id="addPhotoFormCategory"></select>
+						<div class="modal-divider"></div>
+						<input type="submit" class="modal-button" value="Valider">
+					</form>
+				</div>
 			</div>
 		</div>
 	</aside>

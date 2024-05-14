@@ -3,6 +3,16 @@ const portfolio = document.getElementById('portfolio')
 const authToken = window.localStorage.getItem('authToken')
 let works = {}
 let modal = null
+let view = null
+
+const addPhotoForm = document.getElementById('addPhotoForm')
+addPhotoForm.addEventListener('submit', (event) => {
+            event.preventDefault()
+            const formData = new FormData(addPhotoForm)
+
+            sendNewWork(formData)
+
+        })
 
 const loginLink = document.getElementById('loginLink')
 loginLink.addEventListener('click', () => {
@@ -21,6 +31,9 @@ if (authToken) {
 
 function openModal(e) {
     e.preventDefault()
+    if (view === 'form') {
+        changeModalView()
+    }
     modal = document.querySelector(e.target.getAttribute('href'))
     modal.style.display = null
     modal.removeAttribute('aria-hidden')
@@ -28,7 +41,142 @@ function openModal(e) {
     modal.addEventListener('click', closeModal)
     modal.querySelector('.js-modal-close').addEventListener('click', closeModal)
     modal.querySelector('.js-modal-stop').addEventListener('click', stopPropagation)
+    view = 'gallery'
+    document.getElementById('modalAddPhotoBtn').addEventListener('click', changeModalView)
+    populateModalGallery()
+}
+
+function changeModalView(e) {
+    if (e) {
+        e.preventDefault()
+    }
     const modalGallery = document.getElementById('modalGallery')
+    const modalTitle = document.getElementById('modalTitle')
+    const modalBackBtn = document.getElementById('modalBackBtn')
+    const modalForm = document.getElementById('modalForm')
+    const formPhotoInput = document.querySelector('.js-form-photo-input')
+    const addPhotoForm = document.getElementById('addPhotoForm')
+
+    if (view === 'gallery') {
+        modalGallery.style.display = 'none'
+        modalTitle.innerText = 'Ajout photo'
+        modalBackBtn.style.display = null
+        modalBackBtn.addEventListener('click', changeModalView)
+        modalForm.style.display = null
+
+        const formPhotoPreview = document.querySelector('.js-form-photo-preview')
+        while (formPhotoPreview.firstChild) {
+            formPhotoPreview.removeChild(formPhotoPreview.firstChild);
+        }
+        
+        formPhotoInput.style.display = null
+
+        formPhotoInput.addEventListener('change', showSelectedImage)
+
+        addPhotoForm.reset()
+        view = 'form'
+    } else {
+        modalTitle.innerText = 'Galerie photo'
+        modalBackBtn.removeEventListener('click', changeModalView)
+        formPhotoInput.removeEventListener('change', showSelectedImage)
+        modalForm.style.display = 'none'
+        modalBackBtn.style.display = 'none'
+        modalGallery.style.display = null
+        view = 'gallery'
+    }
+    
+}
+
+async function sendNewWork(formData) {
+    const response = await fetch(apiUrl + 'works', { method: 'POST', headers: {'Authorization': `Bearer ${authToken}`}, body: formData})
+    if (response.status == '201') {
+        const newWork = await response.json()
+        works.push(newWork)
+        closeModal()
+        displayWorks(works)
+    }
+}
+
+function showSelectedImage() {
+    const formPhotoInput = document.querySelector('.js-form-photo-input')
+    const input = document.getElementById('addPhotoFormPhoto')
+    const formPhotoPreview = document.querySelector('.js-form-photo-preview')
+    const files = input.files
+    formPhotoInput.removeEventListener('change', showSelectedImage)
+    formPhotoInput.style.display = 'none'
+    for (const file of files) {
+        const image = document.createElement('img')
+        image.src = URL.createObjectURL(file)
+        image.alt = image.title = file.name
+        formPhotoPreview.appendChild(image)
+    }
+    
+}
+
+async function populateCategorieSelect() {
+    try {
+        const response = await fetch(apiUrl + 'categories')
+        const categories = await response.json()
+
+        const categorieSelect = document.getElementById('addPhotoFormCategory')
+        categories.map((categorie) => {
+            const option = document.createElement('option')
+            option.setAttribute('value', categorie.id)
+            option.innerText = categorie.name
+            categorieSelect.appendChild(option)
+        })
+    } catch(error) {
+        console.log(error)
+    }
+}
+
+function closeModal(e) {
+    if (modal === null) return
+    if (e) e.preventDefault()
+    modal.style.display = 'none'
+    const modalGalleryItems = document.getElementById('modalGalleryItems')
+    if (modalGalleryItems.hasChildNodes()) {
+        while (modalGalleryItems.firstChild) {
+            modalGalleryItems.removeChild(modalGalleryItems.firstChild);
+        }
+    }
+    modal.setAttribute('aria-hidden', true)
+    modal.removeAttribute('aria-modal')
+    modal.removeEventListener('click', closeModal)
+    modal.querySelector('.js-modal-close').removeEventListener('click', closeModal)
+    modal.querySelector('.js-modal-stop').removeEventListener('click', stopPropagation)
+    modal = null
+}
+
+function stopPropagation(e) {
+    e.stopPropagation()
+}
+
+async function getWorks() {
+    try {
+        const response = await fetch(apiUrl + 'works')
+        works = await response.json()
+    } catch(error) {
+        console.log(error)
+    }
+}
+
+async function deleteWork(e, workId) {
+    e.preventDefault()
+    try {
+        const response = await fetch(apiUrl + `works/${workId}`, { method: 'DELETE', headers: {'Authorization': `Bearer ${authToken}`}} )
+        if (response.status == '200' || response.status == '204') {
+            await getWorks()
+            closeModal()
+            displayWorks(works)
+        }
+    } catch(error) {
+        console.log(error)
+    }
+}
+
+function populateModalGallery() {
+    const modalGalleryItems = document.getElementById('modalGalleryItems')
     const gallery = document.createElement('div')
     gallery.setAttribute('class', 'modal-gallery')
     works.map((work) => {
@@ -45,52 +193,11 @@ function openModal(e) {
             figure.appendChild(deleteBtn)
             gallery.appendChild(figure)
         })
-    modalGallery.appendChild(gallery)
+    modalGalleryItems.appendChild(gallery)
 }
 
-function closeModal(e) {
-    if (modal === null) return
-    if (e) e.preventDefault()
-    modal.style.display = 'none'
-    const modalGallery = document.getElementById('modalGallery')
-    if (modalGallery.hasChildNodes()) {
-        while (modalGallery.firstChild) {
-            modalGallery.removeChild(modalGallery.firstChild);
-        }
-    }
-    modal.setAttribute('aria-hidden', true)
-    modal.removeAttribute('aria-modal')
-    modal.removeEventListener('click', closeModal)
-    modal.querySelector('.js-modal-close').removeEventListener('click', closeModal)
-    modal.querySelector('.js-modal-stop').removeEventListener('click', stopPropagation)
-    modal = null
-}
-
-function stopPropagation(e) {
-    e.stopPropagation()
-}
-
-async function deleteWork(e, workId) {
-    e.preventDefault()
-    try {
-        const response = await fetch(apiUrl + `works/${workId}`, { method: 'DELETE', headers: {'Authorization': `Bearer ${authToken}`}} )
-        if (response.status == '200' || response.status == '204') {
-            const newWorks = await fetch(apiUrl + 'works')
-            works = await newWorks.json()
-            closeModal()
-            displayWorks(works)
-        }
-    } catch(error) {
-        console.log(error)
-    }
-}
-
-async function getWorks() {
-    try {
-        const response = await fetch(apiUrl + 'works')
-        works = await response.json()
-        
-        
+async function populatePortfolioGallery() {
+        await getWorks()
         //Ajout du titre -- si works non récupérés cela masque la section 'Mes projets'
         const titleDiv = document.createElement('div')
         titleDiv.setAttribute('class', 'portfolio-title')
@@ -150,10 +257,6 @@ async function getWorks() {
         portfolio.appendChild(gallery)
         //Ajout des works à gallery
         displayWorks(works)
-
-    } catch(error) {
-        console.log(error)
-    }
 }
 
 function displayWorks(works) {
@@ -177,4 +280,5 @@ function displayWorks(works) {
         })
 }
 
-getWorks()
+populatePortfolioGallery()
+populateCategorieSelect()
