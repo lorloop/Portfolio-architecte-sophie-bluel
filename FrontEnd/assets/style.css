@@ -113,6 +113,10 @@ nav li {
 	font-size: 1.2em;
 }
 
+nav #instaLogo img {
+	width: 22px;
+}
+
 li a:hover {
 	color: #B1663C;
 }
@@ -213,7 +217,7 @@ li a:hover {
 	text-align: center;
 	font-size: 26px;
 	font-weight: 400;
-	margin-bottom: 46px;
+	margin-bottom: 36px;
 }
 
 .modal-gallery {
@@ -318,17 +322,32 @@ li a:hover {
 }
 
 #addPhotoForm input {
+	font-family: 'Work Sans';
+	color: #444444;
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	padding-left: 16px;
 }
 
 #addPhotoForm select {
+	font-family: 'Work Sans';
+	color: #444444;
+	padding-left: 16px;
+	padding-right: 16px;
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	appearance: none;
+}
+
+#addPhotoForm select:not([multiple]) {
+    background-image: url(icons/chevron-down.png);
+    background-size: 12px 12px;
+    background-repeat: no-repeat;
+    background-position: calc(100% - 16px) 50%;
 }
 
 #addPhotoForm label {
@@ -337,6 +356,8 @@ li a:hover {
 
 #addPhotoForm .modal-button {
 	background-color: #A7A7A7;
+	width: 237px;
+	display: block;
 }
 
 #portfolio h2 {
@@ -383,12 +404,11 @@ li a:hover {
 }
 #contact {
 	max-width: 1140px;
-	width: 50%;
+	width: 30%;
 	margin: auto;
 }
 #contact > * {
 	text-align: center;
-
 }
 #contact h2{
 	margin-bottom: 20px;
@@ -455,8 +475,7 @@ li a:hover {
 	text-decoration: underline;
 }
 
-
-#login input[type="submit"]{
+input[type="submit"]{
 	font-family: 'Syne';
 	font-weight: 700;
 	color: white;
@@ -477,6 +496,12 @@ li a:hover {
 footer {
 	background-color: #FFFFFF;
 	padding: 2em 0;
+}
+
+footer .login {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
 }
 
 footer nav ul {
