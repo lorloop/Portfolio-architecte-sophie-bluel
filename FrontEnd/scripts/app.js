@@ -1,20 +1,26 @@
+// Définition des constantes
+
 const apiUrl = 'http://localhost:5678/api/'
 const portfolio = document.getElementById('portfolio')
 const authToken = window.localStorage.getItem('authToken')
+const addPhotoForm = document.getElementById('addPhotoForm')
+const submitButton = document.getElementById('addPhotoFormSubmit')
+const loginLink = document.getElementById('loginLink')
+
+// Définition des variables
+
 let works = {}
 let modal = null
 let view = null
 
-const addPhotoForm = document.getElementById('addPhotoForm')
-addPhotoForm.addEventListener('submit', (event) => {
-            event.preventDefault()
-            const formData = new FormData(addPhotoForm)
+// Gestion du bouton login / logout 
 
-            sendNewWork(formData)
+if (authToken) {
+    loginLink.innerHTML = '<a href="#">logout</a>'
+    const editBar = document.getElementsByClassName('editBar')
+    editBar[0].style.display = 'flex'
+}
 
-        })
-
-const loginLink = document.getElementById('loginLink')
 loginLink.addEventListener('click', () => {
     if (authToken) {
         window.localStorage.removeItem('authToken')
@@ -23,11 +29,7 @@ loginLink.addEventListener('click', () => {
     }
 })
 
-if (authToken) {
-    loginLink.innerHTML = '<a href="#">logout</a>'
-    const editBar = document.getElementsByClassName('editBar')
-    editBar[0].style.display = 'flex'
-}
+// Modale & gestion des vues de la modale
 
 function openModal(e) {
     e.preventDefault()
@@ -87,15 +89,45 @@ function changeModalView(e) {
     
 }
 
-async function sendNewWork(formData) {
-    const response = await fetch(apiUrl + 'works', { method: 'POST', headers: {'Authorization': `Bearer ${authToken}`}, body: formData})
-    if (response.status == '201') {
-        const newWork = await response.json()
-        works.push(newWork)
-        closeModal()
-        displayWorks(works)
+function closeModal(e) {
+    if (modal === null) return
+    if (e) e.preventDefault()
+    modal.style.display = 'none'
+    const modalGalleryItems = document.getElementById('modalGalleryItems')
+    if (modalGalleryItems.hasChildNodes()) {
+        while (modalGalleryItems.firstChild) {
+            modalGalleryItems.removeChild(modalGalleryItems.firstChild);
+        }
     }
+    modal.setAttribute('aria-hidden', true)
+    modal.removeAttribute('aria-modal')
+    modal.removeEventListener('click', closeModal)
+    modal.querySelector('.js-modal-close').removeEventListener('click', closeModal)
+    modal.querySelector('.js-modal-stop').removeEventListener('click', stopPropagation)
+    modal = null
 }
+
+function stopPropagation(e) {
+    e.stopPropagation()
+}
+
+// Gestion du formulaire d'ajout de work
+
+addPhotoForm.addEventListener('submit', (event) => {
+            event.preventDefault()
+            const formData = new FormData(addPhotoForm)
+            sendNewWork(formData)
+})
+
+addPhotoForm.addEventListener('change', (event) => {
+    const fileInput = document.getElementById('addPhotoFormPhoto')
+    const titleInput = document.getElementById('addPhotoFormTitle')
+    const categoryInput = document.getElementById('addPhotoFormCategory')
+    if (fileInput.value && titleInput.value && categoryInput.value) {
+        submitButton.removeAttribute('disabled')
+        submitButton.style.backgroundColor = '#1D6154'
+    }
+})
 
 function showSelectedImage() {
     const formPhotoInput = document.querySelector('.js-form-photo-input')
@@ -125,32 +157,16 @@ async function populateCategorieSelect() {
             option.innerText = categorie.name
             categorieSelect.appendChild(option)
         })
+        const defaultSelectCategory = document.createElement('option')
+        defaultSelectCategory.setAttribute('value', '')
+        defaultSelectCategory.innerText = ''
+        categorieSelect.prepend(defaultSelectCategory)
     } catch(error) {
         console.log(error)
     }
 }
 
-function closeModal(e) {
-    if (modal === null) return
-    if (e) e.preventDefault()
-    modal.style.display = 'none'
-    const modalGalleryItems = document.getElementById('modalGalleryItems')
-    if (modalGalleryItems.hasChildNodes()) {
-        while (modalGalleryItems.firstChild) {
-            modalGalleryItems.removeChild(modalGalleryItems.firstChild);
-        }
-    }
-    modal.setAttribute('aria-hidden', true)
-    modal.removeAttribute('aria-modal')
-    modal.removeEventListener('click', closeModal)
-    modal.querySelector('.js-modal-close').removeEventListener('click', closeModal)
-    modal.querySelector('.js-modal-stop').removeEventListener('click', stopPropagation)
-    modal = null
-}
-
-function stopPropagation(e) {
-    e.stopPropagation()
-}
+// Requêtes pour les works
 
 async function getWorks() {
     try {
@@ -174,6 +190,20 @@ async function deleteWork(e, workId) {
         console.log(error)
     }
 }
+
+async function sendNewWork(formData) {
+    const response = await fetch(apiUrl + 'works', { method: 'POST', headers: {'Authorization': `Bearer ${authToken}`}, body: formData})
+    if (response.status == '201') {
+        const newWork = await response.json()
+        works.push(newWork)
+        closeModal()
+        submitButton.setAttribute('disabled', true)
+        submitButton.style.backgroundColor = '#A7A7A7'
+        displayWorks(works)
+    }
+}
+
+// Gestion de l'affichage des works 
 
 function populateModalGallery() {
     const modalGalleryItems = document.getElementById('modalGalleryItems')
@@ -279,6 +309,8 @@ function displayWorks(works) {
             gallery.appendChild(figure)
         })
 }
+
+// Appel des fonctions d'affichage des works
 
 populatePortfolioGallery()
 populateCategorieSelect()
